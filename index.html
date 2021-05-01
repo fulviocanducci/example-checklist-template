@@ -8,11 +8,185 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 </head>
 <body>
-    <div id="app" ng-app="app" ng-controller="ctrl">
+    <div class="container mt-5" id="app" ng-app="app" ng-controller="ctrl">
+        <div class="mb-2">
+            <label for="desc1" class="form-label">Descrição</label>
+            <input type="text" class="form-control" ng-model="model.description" id="desc1" placeholder="Digite a descrição ...">
+        </div>
+        <div class="mt-2">
+            <button type="button" ng-click="addGroup()" class="btn btn-primary">Adicionar Group</button>
+        </div> 
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation" ng-repeat="(i, group) in model.groups">
+                <button class="nav-link active" id="tab-item-{{group.id}}" data-bs-toggle="tab" data-bs-target="#tab-{{group.id}}" type="button" role="tab" aria-controls="tab-item-{{group.id}}" aria-selected="true">
+                    {{group.title}}
+                </button>
+            </li>            
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" ng-repeat="group in model.groups" id="tab-{{group.id}}" role="tabpanel" aria-labelledby="tab-item-{{group.id}}">
+                <div class="col-sm-11">
+                    <div class="mb-2">
+                        <label for="title1" class="form-label">Titulo do Grupo</label>
+                        <input type="text" class="form-control" ng-model="group.title" id="groupt1" placeholder="Digite grupo ..." />
+                    </div>                                    
+                </div> 
+                <div class="mt-2 d-flex justify-content-end">
+                    <button type="button" ng-click="addSubGroup(group.subGroups)" class="btn btn-primary">Adicionar pergunta</button>
+                </div> 
+            </div>            
+        </div>
 
-    </div>
+
+
+
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="mt-3">
+                    <div class="mb-2">
+                        <label for="desc1" class="form-label">Descrição</label>
+                        <input type="text" class="form-control" ng-model="model.description" id="desc1" placeholder="Digite a descrição ...">
+                    </div>
+                    <h1>Grupos</h1>
+                    <div class="mt-2" ng-repeat="(ix1, group) in model.groups">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                {{ix1 + 1}}
+                            </div>
+                            <div class="col-sm-11">
+                                <div class="mb-2">
+                                    <label for="title1" class="form-label">Titulo do Grupo</label>
+                                    <input type="text" class="form-control" ng-model="group.title" id="groupt1" placeholder="Digite grupo ..." />
+                                </div>                                    
+                            </div> 
+                            <div class="mt-2 d-flex justify-content-end">
+                                <button type="button" ng-click="addSubGroup(group.subGroups)" class="btn btn-primary">Adicionar pergunta</button>
+                            </div>  
+                        </div>
+                        <div class="row" ng-repeat="subGroup in group.subGroups">
+                            <div class="col-sm-1">
+                                {{ix1 + 1}}
+                            </div>
+                            <div class="col-sm-11">
+                                <div class="mb-2">
+                                    <label for="title1" class="form-label">Titulo do SubGrupo</label>
+                                    <input type="text" class="form-control" ng-model="subGroup.title" id="groupt1" placeholder="Digite sub grupo ..." />
+                                </div> 
+                            </div>
+                            <div class="mt-2 d-flex justify-content-end">
+                                <button type="button" ng-click="addQuestion(subGroup)" class="btn btn-primary">Adicionar pergunta</button>
+                            </div>  
+                            <h1>Perguntas</h1>
+                            <div class="mt-2" ng-repeat="(ix2, question) in subGroup.questions">
+                                <div class="row">
+                                    <div class="col-sm-1"><h1>{{ix2 + 1}}</h1></div>
+                                    <div class="col-sm-11">
+                                        <div class="mb-2">
+                                            <label for="title1" class="form-label">Titulo da Pergunta</label>
+                                            <input type="text" class="form-control" ng-model="question.title" id="title1" placeholder="Digite a título ..." />
+                                        </div>                                
+                                        <div class="row" ng-repeat="option in question.options">
+                                            <div class="col-1">
+                                                ...
+                                            </div>
+                                            <div class="col-11">
+                                                <div class="mb-2">
+                                                    <input type="text" class="form-control" ng-model="option.title" placeholder="Digite a opção ..." />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 d-flex justify-content-end">
+                                            <button type="button" ng-click="addOption(question.options)" class="btn btn-primary">Adicionar resposta</button>
+                                        </div>
+                                    </div>
+                                </div>                                                      
+                            </div> 
+                            <hr />     
+                        </div>                                                                 
+                    </div>
+                    <div class="mt-2">
+                        <button type="button" ng-click="addGroup()" class="btn btn-primary">Adicionar Group</button>
+                    </div>                                
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <pre>{{debugJson()}}</pre>
+            </div>
+        </div>        
+    </div>    
     <script src="/js/jquery-3.6.0.js"></script>
     <script src="/js/bootstrap.bundle.js"></script>
     <script src="/js/angular-1.8.2.js"></script>
+    <script src="/js/uuidv4.js"></script>
+    <script>
+        const app = angular.module('app', []);
+        const ctrl = app.controller('ctrl', function($scope){
+            function uuid() {
+                return uuidv4();
+            }
+            function question1() {
+
+            }
+            $scope.model = {
+                'id': uuid(),
+                'description': '',
+                'groups': [],
+            };                        
+            $scope.addGroup = function() {
+                const obj ={
+                    'id': uuid(),
+                    'title': '',
+                    'subGroups': [{
+                        'id': uuid(),
+                        'title': '',
+                        'questions': []
+                    }],
+                }
+                $scope.model.groups.push(obj);
+                $scope.updateLayout();
+            }
+            $scope.addSubGroup = function(subGroup) {
+                const obj = {
+                    'id': uuid(),
+                    'title': '',
+                    'questions': []
+                };
+                subGroup.push(obj);
+            }
+            $scope.addQuestion = function(group) {
+                const obj = {
+                    'id': uuid(),
+                    'title': 'titulo da pergunta', 
+                    'options': [], 
+                    'status': true
+                };
+                group.questions.push(obj);
+            }
+            $scope.addOption = function(options) {
+                const obj = {
+                    'id': uuid(),
+                    'title': '', 
+                    'status': true};
+                options.push(obj);
+            }
+            $scope.debugJson = function() {
+                return JSON.stringify($scope.model, null, 2);
+            }
+            $scope.updateLayout = function() {
+                if ($scope.model.groups.length > 0) {
+                    var triggerTabList = [].slice.call(document.querySelectorAll('#myTab a'))
+                    triggerTabList.forEach(function (triggerEl) {
+                        var tabTrigger = new bootstrap.Tab(triggerEl)
+                        triggerEl.addEventListener('click', function (event) {
+                            event.preventDefault()
+                            tabTrigger.show()
+                        });
+                    });
+                }
+            }
+            $scope.updateLayout();
+        });
+        
+    </script>
 </body>
 </html>
