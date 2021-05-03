@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
+</head>
+<body>
+    <div ng-app="app" ng-controller="ctrl">
+        <list-items data="datas">Carregando ...</list-items>
+        <button class="btn btn-success" ng-click="addData()">Adicionar</button>
+    </div>
+    <script src="/js/jquery-3.6.0.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+    <script src="/js/angular-1.8.2.js"></script>
+    <script src="/js/uuidv4.js"></script>    
+    <script>
+        const app = angular.module('app', []);
+        app.controller('ctrl', function($scope){
+            $scope.datas = [{
+                'id': 1,
+                'name': "1"
+            }]
+            $scope.addData = function() {
+                $scope.datas.push({id: $scope.datas.length + 1, name: new String($scope.datas.length + 1)})
+            }
+        });
+        app.component('itemSpan',  {
+            template: '<span>{{vm.item.id}} - {{vm.item.name}}</span>',
+            bindings: {
+                item: '='
+            },
+            controllerAs: 'vm',
+            controller : function(){
+                this.$onInit = function() {}                
+            }
+        });
+        app.component('listItems', {
+            template: '<ul class="list-item"><li ng-repeat="d in vm.data"><item-span item="d"></item-span></li><ul>',
+            bindings: {
+                data: '='
+            },
+            controllerAs: 'vm',
+            controller: function() {
+                this.$onInit = function() { }
+            }            
+        });        
+    </script>
+</body>
+</html>
